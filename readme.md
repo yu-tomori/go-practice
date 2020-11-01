@@ -575,3 +575,69 @@ forの中でdeferは避ける
     path/filepathパッケージを使う
         / OSに寄らないファイルパスの処理が行える
 
+インタフェースと抽象化
+    抽象化
+        / 具体的な実装を隠し振る舞いによって共通化させること
+        / 複数の実装を同質のものとして扱う
+    インタフェースによる抽象化
+        / Goではインタフェースでしか抽象化をすることができない
+
+インタフェース
+    型TがインタフェースIを実装しているとは
+        / インタフェースで定義されているメソッドを全て持つ
+        / 型TはインタフェースI型として振舞うことができる
+            / var i I = t // tはT型の変数とする
+
+    インタフェースはメソッドの集まり
+        / メソッドのリストがインタフェースで規定しているものと一致する型はインタフェースを実装していることになる
+
+interface()
+    empty interface
+        / メソッドリストが空なインタフェース
+        / つまりどの型の値も実装していることになる
+        / JavaのObject型のような使い方ができる
+
+fmt.Stringer
+    fmt.Stringer contains a object which is of type GoStringer.
+    GoStringer is implemented by any value that has a GoString method, which defines
+    the Go syntax for that value. The GoString method is used to print values passed
+    as an operand to a %#v format.
+
+インタフェースの設計
+    メソッドリストは小さく
+        / 共通点を抜き出して抽象化しない
+        / 一塊の振る舞いを一つのインタフェースにする
+        / 型を使うユーザが触れる部分がインタフェースでなくても良い
+            / 内部にエンジンやドライバの形で抽象化したものを持つ
+            / http.Client内部のhttp.RountTripperのようなj感じ
+    型階層は作れない
+        / Goでは型階層は作れない
+        / 抽象化はすべてインタフェース
+        / 型階層ではなくコンポジットで表現する
+
+io.Readerとio.Writer
+    入出力の抽象化
+        / 入出力を抽象化したioパッケージで提供される型
+        / それぞれ一つのメソッドしか持たないので実装が楽
+        / 入出力をうまく抽象化し、さまざまな型を透過的に扱える
+            / ファイル、ネットワーク、メモリ etc...
+        / パイプのように簡単に入出力を繋げられる
+
+io.Reader
+    Reader is the interface that wraps that basic Read method.
+    Read reads up to len(p) bytes into p. It returns the number of bytes read(0 <= n <= len(p))
+    end any error encountered.
+    Even if Read returns n < len(p), it may use all of p as scratch space during the call.
+    if some data is available but not len(p) bytes, Read conventionally returns what is available instead of waiting for more.
+    When Read encouteres an error or end-of-file condition after successfully reading n > 0 bytes, it returns the number of bytes read.
+    It may return the (non-nil) error form the same call or return the error (and n == 0) from a subsequent call. An instance of this general case is that a Reader returning a non-zero number of bytes at the end of the input stream may return either err == EOF or err == nil. The next Read should return 0, EOF.
+    Callers should always process the n > 0 bytes returnd before considering the error err. Doing so correctly handles I/O errors that happen after reading some bytes and also both of the allowed EOF behaviors.
+    Implementations of Read are discouraged form returning a zero byte count with a nil erorr, except when len(p) == 0. Callers should treat a return of 0 and nil as indicating that nothing happened; in particular it does not indicate EOF.
+
+io.Writer
+    Writer is the interface that wraps the basic Write method.
+    Writer writes len(p) bytes from p to the underlying data stream. It returns the number of bytes written from p (0 <= n <= len(p)) and any error encountered that caused the write to stop early. Write must return a non-nil error if it returns n < len(p). Write must not modify the slice data, even temporarily.
+
+
+
+
