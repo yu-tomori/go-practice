@@ -638,6 +638,52 @@ io.Writer
     Writer is the interface that wraps the basic Write method.
     Writer writes len(p) bytes from p to the underlying data stream. It returns the number of bytes written from p (0 <= n <= len(p)) and any error encountered that caused the write to stop early. Write must return a non-nil error if it returns n < len(p). Write must not modify the slice data, even temporarily.
 
+構造体の埋め込み
+    構造体に匿名フィールドを埋め込む機能
 
+正常系と異常系
+    正常系
+        / 仕様通りの動作
+        / ユーザが意図通りに使った場合の挙動
+            / マイクロサービスやライブラリのユーザも含む
+    異常系
+        / 意図しない挙動、発生頻度が低い挙動
+        / ユーザが意図通りに使わなかった場合の挙動
+        / 外部要因による意図しないエラー
+            / ネットワーク、ファイル、ライブラリのバグ
+        / バグは起因のエラー
 
+エラー処理の必要性
+    エラーは必ず起きる
+        / 外部要因で起きる可能性がある
+        / 正常系より異常系の方が難しいしパターンが多いことがある
+    エラー処理
+        / エラーが起きても処理を続けることができる場合もある
+        / リトライをかけたり、別の方法をとることもできる
+        / 適切に処理してできる限り処理を続ける
+
+エラー
+    errorインタフェース
+        / エラーを表す型
+        / 最後の戻り値として返すことが多い
+
+エラー処理
+    nilと比較してエラーが発生したかをチェックする
+        ・スコープを狭くするため、代入付きのifを用いる場合が多い
+
+エラー処理のよくあるミス
+    err変数をつかあい回すことによるハンドルミス
+        / エラーが発生してもハンドルされずに次に進んでしまう。
+        / errcheckなどの静的解析ツールで回避できる
+
+エラー処理で大事なこと
+    必要十分な正しい情報を伝えること
+        / エラーの持ち情報でエラーの原因を追える
+        / 必要があれば情報を追加する
+        / 無駄に情報を増やさない
+    受取手によって伝え方を変える
+        / 同じパッケージの別の関数なのか
+        / 別のパッケージなのか
+        / クライアントなのか
+        / エンドユーザなのか
 
