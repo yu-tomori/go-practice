@@ -1,0 +1,12 @@
+0.93s   14102 https://google.com
+0.94s   14081 https://google.com
+1.10s  103757 https://qq.com
+1.31s  103757 https://qq.com
+1.33s  464580 https://youtube.com
+1.35s  463473 https://youtube.com
+1.57s  214821 https://facebook.com
+1.59s  215300 https://facebook.com
+1.61s  287302 https://baidu.com
+1.63s  287281 https://baidu.com
+2.18s  136963 https://tmall.com
+2.61s  136963 https://tmall.com
