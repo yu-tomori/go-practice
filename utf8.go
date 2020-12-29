@@ -24,7 +24,7 @@ func Contains(s, substr string) bool {
 }
 
 func main() {
-	s := "world"
+	s := "世界"
 	fmt.Println(len(s))
 	fmt.Println(utf8.RuneCountInString(s))
 
