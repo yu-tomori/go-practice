@@ -24,13 +24,13 @@ func Contains(s, substr string) bool {
 }
 
 func main() {
-	s := "世界"
+	s := "世"
 	fmt.Println(len(s))
 	fmt.Println(utf8.RuneCountInString(s))
 
 	for i := 0; i < len(s); {
 		r, size := utf8.DecodeRuneInString(s[i:])
-		fmt.Printf("%d\t%c\n", i, r)
+		fmt.Printf("%d\t%c", i, r)
 		i += size
 	}
 
